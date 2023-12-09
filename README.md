@@ -14,7 +14,7 @@ This data science project attempts to create a ML model to predict which role a 
 
 ## Framing the Problem
 
-The problem we want to predict is =="**Which role a player played given their post-game data**"==. Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class** for this problem. As for the metric, because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
+The problem we want to predict is "**Which role a player played given their post-game data**". Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class** for this problem. As for the metric, because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
 
 ***Important Note***: This problem uses post-game data to predict the role of player, we can use any column within this dataset.
 
@@ -79,7 +79,7 @@ Since we cannot safely impute these data without loss of generality for match he
 
 
 ### Step 3: Pick and Apply Baseline Model
-The baseline model is a ==simple decision tree classifier== with `depth=50`, which we will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
+The baseline model is a simple decision tree classifier with `depth=50`, which we will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
 
 > We found that Total Variance Distance by group of `champion` column is huge, as we can see below, some champion can be considered as **toplane champion**, some being **support champion**, etc
 <iframe src="assets/championDistr.html" width=1040 height=720 frameBorder=0></iframe>
@@ -111,16 +111,17 @@ New Features for All Models:
 
 - `dmg_dmgtaken_ratio`: damage / damge taken per minute
 
-- `RobustScaler` on `dpm` column
+- `RobustScaler` on all columns (For KNN and Logistic Regression)
 
 Head of result Dataframe:
-|    | position   | champion   |   kills |   deaths |   assists |     dpm |   damageshare |   damagetakenperminute |   damagemitigatedperminute |    wpm |   wcpm |   vspm |   earnedgoldshare |   minionkills |   monsterkills |   fightparticipationrate |   dmg_dmgtaken_ratio |
-|---:|:-----------|:-----------|--------:|---------:|----------:|--------:|--------------:|-----------------------:|---------------------------:|-------:|-------:|-------:|------------------:|--------------:|---------------:|-------------------------:|---------------------:|
-|  0 | top        | Renekton   |       2 |        3 |         2 | 552.294 |     0.278784  |               1072.4   |                    777.793 | 0.2802 | 0.2102 | 0.9107 |          0.253859 |           220 |             11 |                 0.142857 |             0.515008 |
-|  1 | jng        | Xin Zhao   |       2 |        5 |         6 | 412.084 |     0.208009  |                944.273 |                    650.158 | 0.2102 | 0.6305 | 1.6813 |          0.19022  |            33 |            115 |                 0.285714 |             0.436403 |
-|  2 | mid        | LeBlanc    |       2 |        2 |         3 | 499.405 |     0.252086  |                581.646 |                    227.776 | 0.6655 | 0.2452 | 1.0158 |          0.210665 |           177 |             16 |                 0.178571 |             0.858605 |
-|  3 | bot        | Samira     |       2 |        4 |         2 | 389.002 |     0.196358  |                463.853 |                    218.879 | 0.4203 | 0.2102 | 0.8757 |          0.242201 |           208 |             18 |                 0.142857 |             0.838632 |
-|  4 | sup        | Leona      |       1 |        5 |         6 | 128.301 |     0.0647631 |                475.026 |                    490.123 | 1.0158 | 0.4904 | 2.4168 |          0.103054 |            42 |              0 |                 0.25     |             0.270093 |
+
+| position   | champion   |   kills |   deaths |   assists |     dpm |   damageshare |   damagetakenperminute |   damagemitigatedperminute |    wpm |   wcpm |   vspm |   earnedgoldshare |   minionkills |   monsterkills |   fightparticipationrate |   dmg_dmgtaken_ratio |
+|:-----------|:-----------|--------:|---------:|----------:|--------:|--------------:|-----------------------:|---------------------------:|-------:|-------:|-------:|------------------:|--------------:|---------------:|-------------------------:|---------------------:|
+| top        | Renekton   |       2 |        3 |         2 | 552.294 |     0.278784  |               1072.4   |                    777.793 | 0.2802 | 0.2102 | 0.9107 |          0.253859 |           220 |             11 |                 0.142857 |             0.515008 |
+| jng        | Xin Zhao   |       2 |        5 |         6 | 412.084 |     0.208009  |                944.273 |                    650.158 | 0.2102 | 0.6305 | 1.6813 |          0.19022  |            33 |            115 |                 0.285714 |             0.436403 |
+| mid        | LeBlanc    |       2 |        2 |         3 | 499.405 |     0.252086  |                581.646 |                    227.776 | 0.6655 | 0.2452 | 1.0158 |          0.210665 |           177 |             16 |                 0.178571 |             0.858605 |
+| bot        | Samira     |       2 |        4 |         2 | 389.002 |     0.196358  |                463.853 |                    218.879 | 0.4203 | 0.2102 | 0.8757 |          0.242201 |           208 |             18 |                 0.142857 |             0.838632 |
+| sup        | Leona      |       1 |        5 |         6 | 128.301 |     0.0647631 |                475.026 |                    490.123 | 1.0158 | 0.4904 | 2.4168 |          0.103054 |            42 |              0 |                 0.25     |             0.270093 |
 
 
 
@@ -130,29 +131,43 @@ Explanation:
 
 - The reason why we choose to add `dmg_dmgtaken_ratio` is because we believe this can help extinguish bot role from other roles. To have a good dmg_dmgtaken_ratio, it requires the player to do damage while taking less damage, this is usually easier to accomplish on champions with longer attack range. Typically, bot role ad carry champions tend to be the best at dealing damage at range.
 
-- The reason we want to robust scale `dpm` column is that some extremely good players or "beyond one's average" performances may disturb our data, also known as outliers. For example, ADC and mid players are more likely to have the highest damage after a game, however, the shy in 2018 broke this phenemonon due to his extrodinary skills.
+- The reason we want to robust scale columns is that some extremely good players or "beyond one's average" performances may disturb our data, also known as outliers. For example, ADC and mid players are more likely to have the highest damage after a game, however, the shy in 2018 broke this phenemonon due to his extrodinary skills.
 
 ***Note***: Because the way fight participation rate is calculated, it requires the input data to have a strict structure that starting from the very first row, every 10 rows must correspond to the same match, and first five rows must contain all the players from red or blue team, and same for the second five rows. We cannot put this feature engineering step into the pipeline because it has to be done before we split training set and test set. The model is fit on dataset with added columns, so we will have to calculate and add these new features first so we can predict using the model.
 
-### Models
+### Models selection and performance
 
 We have tested 4 different models: 
-1. Decision Tree 
-2. Random Forest
-3. KNN
-4. Logistic Regression
-
-Model 1 Decision Tree: best parameters: {'dt__max_depth': 50}, training set accuracy: 0.990087950333929, test set accuracy: 0.9527796068102719
-
-Model 2 Random Forest: best parameters: {'rfc__max_depth': 162}, training set accuracy: 1.0, test set accuracy: 0.9608691562411814
-
-Model 3 KNN: best parameters: {'knn__n_neighbors': 22}, training set accuracy: 0.9637733985514063, test set accuracy: 0.9607280594487818
-
-Model 4 Logistic Regression: best parameters: {'logreg__C': 1.0}, training set accuracy: 0.9677241087385947, test set accuracy: 0.9659016085034333
+1. [Decision Tree](https://en.wikipedia.org/wiki/Decision_tree) 
+2. [Random Forest](https://en.wikipedia.org/wiki/Random_forest)
+3. [KNN](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)
+4. [Logistic Regression](https://en.wikipedia.org/wiki/Logistic_regression)
 
 
-Our final choice of model is: Random Forest
-We used GridSearchCV to search for the optimal max_depth for random forest and found the best performance around 162.
+By applying `GridSearchCV` on the four models, we can find the optimal hyperparameters of the four models:
+
+1. Decision Tree: 
+- best parameters: `max_depth= 50`
+- training set accuracy: 0.990087950333929
+- test set accuracy: 0.9527796068102719
+
+2. Random Forest: 
+- best parameters: `max_depth = 162`
+- training set accuracy: 1.0
+- test set accuracy: 0.9608691562411814
+
+3. KNN: 
+- best parameters: `n_neighbors= 22`
+- training set accuracy: 0.9637733985514063
+- test set accuracy: 0.9607280594487818
+
+4. Logistic Regression: 
+- best parameters: `C = 1.0`
+- training set accuracy: 0.9677241087385947
+- test set accuracy: 0.9659016085034333
+
+
+Our final choice of model is: **Random Forest**
 
 `Accuracy improvement`:
 **training set 0.00958282381, test set 0.00950051735**
