@@ -8,15 +8,16 @@ Project 5(Final Project)
 # League Of Legends Position Prediction Model
 
 ## Introduction
-This data science project attempts to create a ML model to predict which role a player played **given the post-game data** using data from professional League of Legends esports matches in 2022. The dataset used for this analysis, which is available [here](https://oracleselixir.com/tools/downloads), was originally compiled from detailed match statistics. The exploratory data analysis on this dataset can be found [here](https://shinyagroove.github.io/LoL-Esports-Action-Analysis/).
+This data science project attempts to create a ML model to predict which role a player played given the post-game data using data from professional League of Legends esports matches in 2022. The dataset used for this analysis, which is available [here](https://oracleselixir.com/tools/downloads), was originally compiled from detailed match statistics. The exploratory data analysis on this dataset can be found [here](https://shinyagroove.github.io/LoL-Esports-Action-Analysis/).
 
 ---
 
 ## Framing the Problem
 
-The problem we want to predict is "**Which role a player played given their post-game data**". Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class** for this problem. As for the metric, because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
+In order to predict "**the role a player played given their post-game data**", identifying the differences of data between different positions is significant. Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class** for this problem. As for the metric, because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
 
 ***Important Note***: This problem uses post-game data to predict the role of player, we can use any column within this dataset.
+
 
 ---
 
@@ -169,20 +170,24 @@ By applying `GridSearchCV` on the four models, we can find the optimal hyperpara
 
 Our final choice of model is: **Random Forest**
 
-`Accuracy improvement`:
-**training set 0.00958282381, test set 0.00950051735**
+> Accuracy improvement: training set 0.00958282381, test set 0.00950051735
 
 Although the improvement in accuracy is marginal compared to our baseline model, it is still a slight improvement.
 
+### Confusion Matrix of Random Forest
 
+By observing the confusion matrix of our random forest model, we notice that support is the easiest popsition to predict correctly, mid and top combination is the hardest to predict correctly.
+
+
+<iframe src="assets/confusion.html" width=1040 height=720 frameBorder=0></iframe>
 ---
 
 
 ## Fairness Analysis
 
 
-X: Frequently Played Champions
-Y: Less Frequently Played Champions
+X: Frequently Played Champions  
+Y: Less Frequently Played Champions  
 
 We will define frequently played champion as champion that is played more than the median number of games played by each champion, less frequently played champion will be less than or equal to median.
 
@@ -196,7 +201,9 @@ The model's precision for frequently played champions is significantly different
 We used the difference between the precision of frequently played champions and less frequently played champion as our test statistics.
 
 We will use p-value cutoff 0.05, and the p-value we got is 0.0. Because p-value we got is 0 and is below the cutoff, we will reject the null hypothesis. Therefore, we suspect that our model does worse for champions that are less frequently played.
+Here is the result graph:
 
+<iframe src="assets/permutation.html" width=1040 height=720 frameBorder=0></iframe>
 
 
 
