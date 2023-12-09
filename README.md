@@ -14,7 +14,7 @@ This data science project attempts to create a ML model to predict which role a 
 
 ## Framing the Problem
 
-The problem we want to predict is **Which role a player played given their post-game data**. Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class**. Because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
+The problem we want to predict is "**Which role a player played given their post-game data**". Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class** for this problem. As for the metric, because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
 
 ***Important Note***: This problem uses post-game data to predict the role of player, we can use any column within this dataset.
 
@@ -48,7 +48,20 @@ The problem we want to predict is **Which role a player played given their post-
 
 ***Note***:`position` and `champion` are nominal data, the rest are all quantitative data.
 
-### Step 2: Pick and Apply Baseline Model
+### Step 2: Missingness assessment
+
+The following data frame shows the missingness of each our columns.
+
+|                          |     0 |\n|:-------------------------|------:|\n| league                   |     0 |\n| position                 |     0 |\n| champion                 |     0 |\n| kills                    |     0 |\n| deaths                   |     0 |\n| assists                  |     0 |\n| dpm                      |    10 |\n| damageshare              |    10 |\n| damagetakenperminute     |    10 |\n| damagemitigatedperminute | 18190 |\n| wpm                      |    10 |\n| wcpm                     |    10 |\n| vspm                     |    10 |\n| earnedgoldshare          |     0 |\n| minionkills              |    10 |\n| monsterkills             |    10 |
+
+Same as we discovered in previous project, missingness of data is strongly correlated to the country where the match is held.
+Since we cannot safely impute these data without loss of generality for match held in China or World Series, we will go ahead and drop any column we plan to use that has missing values.
+
+
+<iframe src="assets/championDistr.html" width=1040 height=720 frameBorder=0></iframe>
+
+
+### Step 3: Pick and Apply Baseline Model
 The baseline model is a simple decision tree classifier which We will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
 
 One hot encoding was performed on `champion` column, we did not change `position` since it is our response variable.
