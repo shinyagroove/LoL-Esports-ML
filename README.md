@@ -170,7 +170,9 @@ By applying `GridSearchCV` on the four models, we can find the optimal hyperpara
 
 Our final choice of model is: **Random Forest**
 
-> Accuracy improvement: training set 0.00958282381, test set 0.00950051735
+> Accuracy improvement: 
+training set: 0.00958282381
+test set: 0.00950051735
 
 Although the improvement in accuracy is marginal compared to our baseline model, it is still a slight improvement.
 
