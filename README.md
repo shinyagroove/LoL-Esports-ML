@@ -1,42 +1,55 @@
-# Predict which role a player played given their post-game data
+Student: Qilong Zou, Haotian Zhu
 
-## Overview
-This data science project attempts to create a ML model to predict which role a player played given the post-game data using data from professional League of Legends esports matches in 2022. The dataset used for this analysis, which is available [here](https://oracleselixir.com/tools/downloads), was originally compiled from detailed match statistics. The exploratory data analysis on this dataset can be found [here](https://shinyagroove.github.io/LoL-Esports-Action-Analysis/).
+Course: DSC 80
+
+Project 5(Final Project)
+
+---
+# League Of Legends Position Prediction Model
+
+## Introduction
+This data science project attempts to create a ML model to predict which role a player played **given the post-game data** using data from professional League of Legends esports matches in 2022. The dataset used for this analysis, which is available [here](https://oracleselixir.com/tools/downloads), was originally compiled from detailed match statistics. The exploratory data analysis on this dataset can be found [here](https://shinyagroove.github.io/LoL-Esports-Action-Analysis/).
 
 ---
 
 ## Framing the Problem
 
-The problem we want to predict is `Predict which role a player played given their post-game data`. This is a classification problem, and multiclass classification. Thre response variable is `position`. The metric used to evaluate the models is accuracy. Since this problem uses post-game data to predict the role of player, we can use any column within this dataset.
+The problem we want to predict is **Which role a player played given their post-game data**. Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class**. Because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
+
+***Important Note***: This problem uses post-game data to predict the role of player, we can use any column within this dataset.
 
 ---
 
 
 ## Baseline Model
 
+### Step 1: Data Cleaning
+1. Drop any row that have missing value in any of the column we are using.
+2. Drop all the rows containing team data because we are analyzing position of each player. (each match has 12 rows, 10 rows corresponding to each player and 2 rows that contain team statistics)
 
-The baseline model is a simple decision tree classifier. 
+ 
+> Features used in the model are following:
 
-Features used in the model are following:
+- `position`: Indicating which role the player has played. (**Nominal**)
+- `champion`: Name of champion the player has played. (**Nominal**)
+- `kills`: Number of kills. (quantitative)
+- `deaths`: Number of deaths. (quantitative)
+- `assists`: Number of assists. (quantitative)
+- `dpm`: Average damage to champions per minute. (quantitative)
+- `damageshare`: Average share of team’s total damage to champions. (quantitative)
+- `damagetakenperminute`: Damage taken per minute. (quantitative)
+- `damagemitigatedperminute`: Damage mitigated per minute. (quantitative)
+- `wpm`: Average wards placed per minute. (quantitative)
+- `wcpm`: Average wards cleared per minute. (quantitative)
+- `vspm`: Vision score per minute. (quantitative)
+- `earnedgoldshare`: Percentage of gold player earned against the team. (quantitative)
+- `minionkills`: Number of minions killed. (quantitative)
+- `monsterkills`: Number of monsters killed. (quantitative)
 
-`position`: Indicating which role the player has played
-`champion`: Name of champion the player has played
-`kills`: Number of kills
-`deaths`: Number of deaths
-`assists`: Number of assists
-`dpm`: Average damage to champions per minute
-`damageshare`: Average share of team’s total damage to champions
-`damagetakenperminute`: 
-`damagemitigatedperminute`: 
-`wpm`: Average wards placed per minute
-`wcpm`: Average wards cleared per minute
-`vspm`: Vision score per minute
-`earnedgoldshare`: Percentage of gold player earned against the team
-`minionkills`: Number of minions killed
-`monsterkills`: Number of monsters killed
+***Note***:`position` and `champion` are nominal data, the rest are all quantitative data.
 
-
-`position` and `champion` are nominal data, the rest are all quantitative data.
+### Step 2: Pick and Apply Baseline Model
+The baseline model is a simple decision tree classifier which We will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
 
 One hot encoding was performed on `champion` column, we did not change `position` since it is our response variable.
 
