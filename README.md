@@ -14,7 +14,7 @@ This data science project attempts to create a ML model to predict which role a 
 
 ## Framing the Problem
 
-The problem we want to predict is "**Which role a player played given their post-game data**". Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class** for this problem. As for the metric, because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
+The problem we want to predict is =="**Which role a player played given their post-game data**"==. Since the  response variable is `position`, which is a categorical value with multiple classes(i.e. `top`,`mid`, `sup`, `jg`, `bot`), we will use **Classification with multi-class** for this problem. As for the metric, because our data is balanced(there will never be a team with 5 ADC),  accuracy is totally OK to handle the situation. 
 
 ***Important Note***: This problem uses post-game data to predict the role of player, we can use any column within this dataset.
 
@@ -79,7 +79,7 @@ Since we cannot safely impute these data without loss of generality for match he
 
 
 ### Step 3: Pick and Apply Baseline Model
-The baseline model is a **simple decision tree classifier** with `depth=50`, which we will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
+The baseline model is a ==simple decision tree classifier== with `depth=50`, which we will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
 
 > We found that Total Variance Distance by group of `champion` column is huge, as we can see below, some champion can be considered as **toplane champion**, some being **support champion**, etc
 <iframe src="assets/championDistr.html" width=1040 height=720 frameBorder=0></iframe>
@@ -88,10 +88,13 @@ Hence, one hot encoding was performed on `champion` column for the sake of a bet
 
 
 ### Result
-training set accuracy: 0.9904171761828614  
-test set accuracy: 0.951368638886276  
 
-A test set accuracy of 95% is pretty high! However, there is still space of improvements. Some columns have a plenty of outliers which will disturb our prediction, under such circumstances, we'd better use Robust or such transformers for a more accurate result. The following graph is the within group distribution of `dpm` column.
+Model(Baseline): (`One hot transformer` on `champion` ) + (`Dicision Tree` on all columns we **selected**)
+
+**Training set accuracy**: 0.9904171761828614  
+**Test set accuracy**: 0.951368638886276  
+
+A test set accuracy of 95% is pretty high! However, there is still space of improvements. Some columns have a plenty of outliers which will disturb our prediction, under such circumstances, we'd better use Robust or such transformers for a more accurate result. The following graph is the within group distribution of `dpm` column which indicates a high number of outliers:
 
 <iframe src="assets/dpm.html" width=1040 height=720 frameBorder=0></iframe>
 
@@ -101,20 +104,43 @@ A test set accuracy of 95% is pretty high! However, there is still space of impr
 
 ## Final Model
 
-Features added:
-`fightparticipationrate`: (kill+assist) / (total kills + total deaths across all players in the same team)
-The reason why we choose to feature engineer fight participation rate is because we believe top role in general are less likely to have high participation rate because the main objective in early game(dragons) only spawn near bottom lane, and it is usually where the team fight would happen. It is pretty far and takes decent amount of time to get to from top lane, so we thought this would be a good estimation of team fight participation rate that could help extinguish the difference between top role and mid role or bot role for example.
+
+### Features
+New Features for All Models:
+- `fightparticipationrate`: Calculated by (kill+assist) / (total kills + total assists across all players in the same team)
+
+- `dmg_dmgtaken_ratio`: damage / damge taken per minute
+
+- `RobustScaler` on `dpm` column
+
+Head of result Dataframe:
+|    | position   | champion   |   kills |   deaths |   assists |     dpm |   damageshare |   damagetakenperminute |   damagemitigatedperminute |    wpm |   wcpm |   vspm |   earnedgoldshare |   minionkills |   monsterkills |   fightparticipationrate |   dmg_dmgtaken_ratio |
+|---:|:-----------|:-----------|--------:|---------:|----------:|--------:|--------------:|-----------------------:|---------------------------:|-------:|-------:|-------:|------------------:|--------------:|---------------:|-------------------------:|---------------------:|
+|  0 | top        | Renekton   |       2 |        3 |         2 | 552.294 |     0.278784  |               1072.4   |                    777.793 | 0.2802 | 0.2102 | 0.9107 |          0.253859 |           220 |             11 |                 0.142857 |             0.515008 |
+|  1 | jng        | Xin Zhao   |       2 |        5 |         6 | 412.084 |     0.208009  |                944.273 |                    650.158 | 0.2102 | 0.6305 | 1.6813 |          0.19022  |            33 |            115 |                 0.285714 |             0.436403 |
+|  2 | mid        | LeBlanc    |       2 |        2 |         3 | 499.405 |     0.252086  |                581.646 |                    227.776 | 0.6655 | 0.2452 | 1.0158 |          0.210665 |           177 |             16 |                 0.178571 |             0.858605 |
+|  3 | bot        | Samira     |       2 |        4 |         2 | 389.002 |     0.196358  |                463.853 |                    218.879 | 0.4203 | 0.2102 | 0.8757 |          0.242201 |           208 |             18 |                 0.142857 |             0.838632 |
+|  4 | sup        | Leona      |       1 |        5 |         6 | 128.301 |     0.0647631 |                475.026 |                    490.123 | 1.0158 | 0.4904 | 2.4168 |          0.103054 |            42 |              0 |                 0.25     |             0.270093 |
 
 
-`dmg_dmgtaken_ratio`: damage / damge taken per minute
-The reason why we choose to add this feature is because we believe this can help extinguish bot role from other roles. To have a good dmg_dmgtaken_ratio, it requires the player to do damage while taking less damage, this is usually easier to accomplish on champions with longer attack range. Typically, bot role ad carry champions tend to be the best at dealing damage at range.
 
+Explanation:
 
+- The reason why we choose to feature engineer fight participation rate is because we believe top role in general are less likely to have high participation rate because the main objective in early game(dragons) only spawn near bottom lane, and it is usually where the team fight would happen. It is pretty far and takes decent amount of time to get to from top lane, so we thought this would be a good estimation of team fight participation rate that could help extinguish the difference between top role and mid role or bot role for example.
 
-**Note: Because the way fight participation rate is calculated, it requires the input data to have a strict structure that starting from the very first row, every 10 rows must correspond to the same match, and first five rows must contain all the players from red or blue team, and same for the second five rows. We cannot put this feature engineering step into the pipeline because it has to be done before we split training set and test set. The model is fit on dataset with added columns, so we will have to calculate and add these new features first so we can predict using the model.**
+- The reason why we choose to add `dmg_dmgtaken_ratio` is because we believe this can help extinguish bot role from other roles. To have a good dmg_dmgtaken_ratio, it requires the player to do damage while taking less damage, this is usually easier to accomplish on champions with longer attack range. Typically, bot role ad carry champions tend to be the best at dealing damage at range.
 
+- The reason we want to robust scale `dpm` column is that some extremely good players or "beyond one's average" performances may disturb our data, also known as outliers. For example, ADC and mid players are more likely to have the highest damage after a game, however, the shy in 2018 broke this phenemonon due to his extrodinary skills.
 
-We have tested 4 different models: Decision Tree, Random Forest, KNN, Logistic Regression
+***Note***: Because the way fight participation rate is calculated, it requires the input data to have a strict structure that starting from the very first row, every 10 rows must correspond to the same match, and first five rows must contain all the players from red or blue team, and same for the second five rows. We cannot put this feature engineering step into the pipeline because it has to be done before we split training set and test set. The model is fit on dataset with added columns, so we will have to calculate and add these new features first so we can predict using the model.
+
+### Models
+
+We have tested 4 different models: 
+1. Decision Tree 
+2. Random Forest
+3. KNN
+4. Logistic Regression
 
 Model 1 Decision Tree: best parameters: {'dt__max_depth': 50}, training set accuracy: 0.990087950333929, test set accuracy: 0.9527796068102719
 
