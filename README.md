@@ -52,8 +52,24 @@ The problem we want to predict is "**Which role a player played given their post
 
 The following data frame shows the missingness of each our columns.
 
-
-|                          |   missingness |\n|:-------------------------|--------------:|\n| league                   |             0 |\n| position                 |             0 |\n| champion                 |             0 |\n| kills                    |             0 |\n| deaths                   |             0 |\n| assists                  |             0 |\n| dpm                      |            10 |\n| damageshare              |            10 |\n| damagetakenperminute     |            10 |\n| damagemitigatedperminute |         18190 |\n| wpm                      |            10 |\n| wcpm                     |            10 |\n| vspm                     |            10 |\n| earnedgoldshare          |             0 |\n| minionkills              |            10 |\n| monsterkills             |            10 |
+|                          |   missingness |
+|:-------------------------|--------------:|
+| league                   |             0 |
+| position                 |             0 |
+| champion                 |             0 |
+| kills                    |             0 |
+| deaths                   |             0 |
+| assists                  |             0 |
+| dpm                      |            10 |
+| damageshare              |            10 |
+| damagetakenperminute     |            10 |
+| damagemitigatedperminute |         18190 |
+| wpm                      |            10 |
+| wcpm                     |            10 |
+| vspm                     |            10 |
+| earnedgoldshare          |             0 |
+| minionkills              |            10 |
+| monsterkills             |            10 |
 
 Same as we discovered in previous project, missingness of data is strongly correlated to the country where the match is held.
 Since we cannot safely impute these data without loss of generality for match held in China or World Series, we will go ahead and drop any column we plan to use that has missing values.
@@ -72,8 +88,8 @@ Hence, one hot encoding was performed on `champion` column for the sake of a bet
 
 
 ### Result
-training set accuracy: 0.9904171761828614
-test set accuracy: 0.951368638886276
+training set accuracy: 0.9904171761828614  
+test set accuracy: 0.951368638886276  
 
 A test set accuracy of 95% is pretty high! However, there is still space of improvements. Some columns have a plenty of outliers which will disturb our prediction, under such circumstances, we'd better use Robust or such transformers for a more accurate result. The following graph is the within group distribution of `dpm` column.
 
