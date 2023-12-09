@@ -52,23 +52,32 @@ The problem we want to predict is "**Which role a player played given their post
 
 The following data frame shows the missingness of each our columns.
 
-|                          |     0 |\n|:-------------------------|------:|\n| league                   |     0 |\n| position                 |     0 |\n| champion                 |     0 |\n| kills                    |     0 |\n| deaths                   |     0 |\n| assists                  |     0 |\n| dpm                      |    10 |\n| damageshare              |    10 |\n| damagetakenperminute     |    10 |\n| damagemitigatedperminute | 18190 |\n| wpm                      |    10 |\n| wcpm                     |    10 |\n| vspm                     |    10 |\n| earnedgoldshare          |     0 |\n| minionkills              |    10 |\n| monsterkills             |    10 |
+
+|                          |   missingness |\n|:-------------------------|--------------:|\n| league                   |             0 |\n| position                 |             0 |\n| champion                 |             0 |\n| kills                    |             0 |\n| deaths                   |             0 |\n| assists                  |             0 |\n| dpm                      |            10 |\n| damageshare              |            10 |\n| damagetakenperminute     |            10 |\n| damagemitigatedperminute |         18190 |\n| wpm                      |            10 |\n| wcpm                     |            10 |\n| vspm                     |            10 |\n| earnedgoldshare          |             0 |\n| minionkills              |            10 |\n| monsterkills             |            10 |
 
 Same as we discovered in previous project, missingness of data is strongly correlated to the country where the match is held.
 Since we cannot safely impute these data without loss of generality for match held in China or World Series, we will go ahead and drop any column we plan to use that has missing values.
 
 
-<iframe src="assets/championDistr.html" width=1040 height=720 frameBorder=0></iframe>
+
 
 
 ### Step 3: Pick and Apply Baseline Model
-The baseline model is a simple decision tree classifier which We will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
+The baseline model is a **simple decision tree classifier** with `depth=50`, which we will use to predict which role a player played using post-match data(multi-class), position is the choice of our response variable as it is the direct measurement of which role the player played in the match.
 
-One hot encoding was performed on `champion` column, we did not change `position` since it is our response variable.
+> We found that Total Variance Distance by group of `champion` column is huge, as we can see below, some champion can be considered as **toplane champion**, some being **support champion**, etc
+<iframe src="assets/championDistr.html" width=1040 height=720 frameBorder=0></iframe>
 
-`Model Performance`:
+Hence, one hot encoding was performed on `champion` column for the sake of a better performance of our model. Then, `Decision Tree classifier(depth=50)` was performed.
+
+
+### Result
 training set accuracy: 0.9904171761828614
 test set accuracy: 0.951368638886276
+
+A test set accuracy of 95% is pretty high! However, there is still space of improvements. Some columns have a plenty of outliers which will disturb our prediction, under such circumstances, we'd better use Robust or such transformers for a more accurate result. The following graph is the within group distribution of `dpm` column.
+
+<iframe src="assets/dpm.html" width=1040 height=720 frameBorder=0></iframe>
 
 
 ---
