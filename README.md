@@ -192,11 +192,10 @@ We used the difference between the precision of frequently played champions and 
 
 We will use p-value cutoff 0.05
 
-The p-value we got is 0.0. Because p-value we got is 0 and is below the cutoff, we will reject the null hypothesis. Therefore, we suspect that our model does worse for champions that are less frequently played.
-Here is the result graph:
-
 <iframe src="assets/permutation.html" width=1040 height=720 frameBorder=0></iframe>
 
+
+The p-value we got is 0.0. Because p-value we got is 0 and is below the cutoff, we will reject the null hypothesis. Therefore, we suspect that our model does worse for champions that are less frequently played.
 
 
 
