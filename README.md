@@ -213,7 +213,7 @@ Here is the result graph:
 
 
 ---
-## Distribution of Original Features
+## <a name="Distribution-of-Original-Features"></a> Distribution-of-Original-Features
 
 <iframe src="assets/damagemitigatedperminute_trash.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/damageshare_trash.html" width=1040 height=720 frameBorder=0></iframe>
