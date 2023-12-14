@@ -85,7 +85,7 @@ The baseline model is a simple decision tree classifier with `depth=50`, which w
 > We found that Total Variance Distance by group of `champion` column is huge, as we can see below, some champion can be considered as **toplane champion**, some being **support champion**, etc
 <iframe src="assets/championDistr.html" width=1040 height=720 frameBorder=0></iframe>
 
-***Note***: See the [end of this page](#Appendix - Distribution of Original Features) for more information about the distribution of our features.
+***Note***: See the [Appendix](#Distribution-of-Original-Features) for more information about the distribution of our features.
 
 
 Hence, one hot encoding was performed on `champion` column for the sake of a better performance of our model. Then, `Decision Tree classifier(depth=50)` was performed.
@@ -213,7 +213,7 @@ Here is the result graph:
 
 
 ---
-## Appendix - Distribution of Original Features
+## Distribution of Original Features
 
 <iframe src="assets/damagemitigatedperminute_trash.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/damageshare_trash.html" width=1040 height=720 frameBorder=0></iframe>
@@ -223,10 +223,5 @@ Here is the result graph:
 <iframe src="assets/kills_trash.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/vspm_trash.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/wpm_trash.html" width=1040 height=720 frameBorder=0></iframe>
-
-
-
-
-
-
 ---
+
