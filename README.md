@@ -8,7 +8,7 @@ Project 5(Final Project)
 # League Of Legends Position Prediction Model
 
 ## Introduction
-This data science project attempts to create a ML model to predict which role a player played given the post-game data using data from professional League of Legends esports matches in 2022. The dataset used for this analysis, which is available [here](https://oracleselixir.com/tools/downloads), was originally compiled from detailed match statistics. The exploratory data analysis on this dataset can be found [here](https://shinyagroove.github.io/LoL-Esports-Action-Analysis/).
+This data science project attempts to create a ML model to predict which role a player played given the post-game data using data from professional League of Legends esports matches in 2022. The dataset used for this analysis, which is available [here](https://oracleselixir.com/tools/downloads), was originally compiled from detailed match statistics. The exploratory data analysis on this dataset can be found [here](https://shinyagroove.github.io/LoL-Esports-Action-Analysis/) and [here](https://zhtdbb1.github.io/League-of-Legends-Aggressiveness-Analysis-2017-2018/).
 
 ---
 
@@ -84,6 +84,9 @@ The baseline model is a simple decision tree classifier with `depth=50`, which w
 
 > We found that Total Variance Distance by group of `champion` column is huge, as we can see below, some champion can be considered as **toplane champion**, some being **support champion**, etc
 <iframe src="assets/championDistr.html" width=1040 height=720 frameBorder=0></iframe>
+
+***Note***: See the end of this page for more information about the distribution of our features.
+
 
 Hence, one hot encoding was performed on `champion` column for the sake of a better performance of our model. Then, `Decision Tree classifier(depth=50)` was performed.
 
@@ -206,6 +209,21 @@ We will use p-value cutoff 0.05, and the p-value we got is 0.0. Because p-value 
 Here is the result graph:
 
 <iframe src="assets/permutation.html" width=1040 height=720 frameBorder=0></iframe>
+
+
+
+---
+<iframe src="assets/damagemitigatedperminute_trash.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/damageshare_trash.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/damagetakenperminute_trash_trash.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/deaths_trash.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/wcpm_trash.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/kills_trash.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/vspm_trash.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/wpm_trash.html" width=1040 height=720 frameBorder=0></iframe>
+
+
+
 
 
 
