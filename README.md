@@ -100,6 +100,7 @@ New Features added:
 - `dmg_dmgtaken_ratio`: damage / damge taken per minute
 
 - `RobustScaler` on all columns (Only for KNN and Logistic Regression)
+
 **Note** We need this since KNN and Logistic Regression models are sensitive to the scale of data.
 
 Explanation:
