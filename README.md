@@ -211,9 +211,9 @@ Here is the result graph:
 <iframe src="assets/damagetakenperminute.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/deaths.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/dpm.html" width=1040 height=720 frameBorder=0></iframe>
-<iframe src="assets/wcpm.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/kills.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/vspm.html" width=1040 height=720 frameBorder=0></iframe>
+<iframe src="assets/wcpm.html" width=1040 height=720 frameBorder=0></iframe>
 <iframe src="assets/wpm.html" width=1040 height=720 frameBorder=0></iframe>
 
 
