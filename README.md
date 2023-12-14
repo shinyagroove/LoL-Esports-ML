@@ -19,7 +19,7 @@ In our prediction model, we aim to determine "**the role a player played given t
 
 ### Missingness assessment
 
-The following data frame shows the missingness of each our columns.
+The following dataframe shows the number of missing value for each column
 
 |                          |   missingness |
 |:-------------------------|--------------:|
@@ -40,7 +40,7 @@ The following data frame shows the missingness of each our columns.
 | minionkills              |            10 |
 | monsterkills             |            10 |
 
-Same as we discovered in previous project, missingness of data is strongly correlated to the country(assumption about DGP) where the match is held.
+Same as we have discovered in previous project, missingness of data is strongly correlated to the country (assumption about DGP) where the match is held.
 Since we cannot safely impute these data without loss of generality for match held in China or World Series, we will go ahead and drop any column we plan to use that has missing values.
 
 ### Data Cleaning
